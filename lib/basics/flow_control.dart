@@ -32,6 +32,22 @@ void main() {
   int? b;
   List<int?> list2 = [1, null, 3];
   print(b);
+  final x = b?.isEven; // NULL ASSERTION
+
+  bool vars = b!.isEven; // NULL ASSERTION
+  if (b != null) {
+    bool vars = b.isEven; // TYPE PROMOTION
+  }
+
+  try {
+
+  } on FormatException catch(e) {
+
+  } catch(e) {
+
+  } finally {
+
+  }
 
   // returns int or null and takes nullable int as parameter
   int? controlPoints(int? a) {

@@ -1,15 +1,17 @@
 class User {
   late final String name;
-  late final int _amount;
+  late final int _amount; // Private attribute
   late final int? age;
   late final String? city;
+  String? _country;
+  String _galaxy;
 
   // Computed value, it will only be calculated when it is being called. Getter
   int get amount => _amount;
 
   // Setter
   set amount(int? amount) {
-    _amount = amount == null ? 0 : amount;
+    _amount = amount ?? 0;
   }
 
   //  #0 Empty Constructor
@@ -37,7 +39,7 @@ class User {
 
   //  #3 Syntatic Sugar Constructor with named and nullable parameters.
   // {} -> for named parameters
-  User(this.name, this._amount, {this.age, this.city});
+  User(this._country, this._galaxy, this.name, this._amount, {this.age, this.city});
 
 //  #4 Syntatic Sugar Constructor with optional parameters.
 // [] -> for optional parameters, equivalent of int?
