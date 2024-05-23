@@ -6,14 +6,6 @@ class User {
   String? _country;
   String _galaxy;
 
-  // Computed value, it will only be calculated when it is being called. Getter
-  int get amount => _amount;
-
-  // Setter
-  set amount(int? amount) {
-    _amount = amount ?? 0;
-  }
-
   //  #0 Empty Constructor
   //User(){}
 
@@ -23,6 +15,7 @@ class User {
     this.name = name;
     this._amount = amount;
     this.age = age;
+
     this.city = city;
   }
   */
@@ -47,4 +40,12 @@ class User {
 
 //  #5 Constructor with default, required and named parameters.
 //User(String name, int amount, {required int age, String? city});
+
+  // Computed value, it will only be calculated when it is being called. Getter
+  int get amount => _amount;
+
+  // Setter
+  set amount(int? amount) {
+    _amount = amount ?? 0;
+  }
 }
