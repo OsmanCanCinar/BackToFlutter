@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  print("main function RunApp is called with MyApp parameter");
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key}){
+    print("MyApp constructor is called");
+  }
 
   // This widget is the root of your application.abcœœ
   @override
   Widget build(BuildContext context) {
+    print("MyApp build is called");
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -31,13 +35,15 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  MyHomePage({super.key, required this.title}){
+    print("MyHomePage constructor is called");
+  }
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -55,6 +61,21 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  _MyHomePageState() {
+    print("_MyHomePageState constructor is called");
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    print("_MyHomePageState initState is called");
+  }
+
+  @override
+  void didUpdateWidget(covariant MyHomePage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+  }
+
   int _counter = 0;
 
   void _incrementCounter() {
@@ -65,12 +86,13 @@ class _MyHomePageState extends State<MyHomePage> {
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
       _counter++;
-      print("dsad");
+      print("_MyHomePageState _incrementCounter is called");
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    print("_MyHomePageState build is called");
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -113,6 +135,10 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
+            TextWidget('inner value $_counter'),
+            Counter('outer value $_counter',
+              initialVal: 3,
+            ),
           ],
         ),
       ),
@@ -124,3 +150,43 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
+class TextWidget extends StatelessWidget {
+  final String content;
+  const TextWidget(this.content, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(content);
+  }
+}
+
+class Counter extends StatefulWidget {
+  final String content;
+  final int initialVal;
+  const Counter(this.content, {super.key, required this.initialVal});
+
+  @override
+  State<Counter> createState() => _CounterState();
+}
+
+class _CounterState extends State<Counter> {
+  int _count = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _count = widget.initialVal;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(onPressed: () {
+      setState(() {
+        _count++;
+      });
+    }, child: Text('${widget.content} $_count'));
+  }
+}
+
+
