@@ -6,7 +6,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key}){
+  MyApp({super.key}) {
     print("MyApp constructor is called");
   }
 
@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({super.key, required this.title}){
+  MyHomePage({super.key, required this.title}) {
     print("MyHomePage constructor is called");
   }
 
@@ -136,9 +136,11 @@ class _MyHomePageState extends State<MyHomePage> {
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             TextWidget('inner value $_counter'),
-            Counter('outer value $_counter',
+            Counter(
+              'outer value $_counter',
               initialVal: 3,
             ),
+            const ButtonWrapper(),
           ],
         ),
       ),
@@ -151,8 +153,137 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
+class ButtonWrapper extends StatefulWidget {
+  const ButtonWrapper({super.key});
+
+  @override
+  State<ButtonWrapper> createState() => _ButtonWrapperState();
+}
+
+class _ButtonWrapperState extends State<ButtonWrapper> {
+  int flag = 0;
+  String request = '';
+  bool isChecked = false;
+  String text = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        children: [
+          CustomEditTextFiled(request: request),
+          Text(text),
+          Checkbox(
+              value: isChecked,
+              onChanged: (value) {
+                print(value);
+                setState(() {
+                  if (value != null) {
+                    isChecked = value;
+                  }
+                });
+              }),
+          ElevatedButton(
+              onPressed: flag == 0
+                  ? () {
+                      print('0');
+                      setState(() {
+                        flag = (flag + 1) % 3;
+                        request = "zero";
+                      });
+                    }
+                  : null,
+              child: Text('0')),
+          ElevatedButton(
+              onPressed: flag == 1
+                  ? () {
+                      print('1');
+                      setState(() {
+                        flag = (flag + 1) % 3;
+                        request = "one";
+                      });
+                    }
+                  : null,
+              child: Text('1')),
+          ElevatedButton(
+              onPressed: flag == 2
+                  ? () {
+                      print('2');
+                      setState(() {
+                        flag = (flag + 1) % 3;
+                        request = "two";
+                      });
+                    }
+                  : null,
+              child: Text('2')),
+        ],
+      ),
+    );
+  }
+}
+
+class CustomEditTextFiled extends StatefulWidget {
+  final String request;
+
+  const CustomEditTextFiled({super.key, required this.request});
+
+  @override
+  State<CustomEditTextFiled> createState() => _CustomEditTextFiledState();
+}
+
+class _CustomEditTextFiledState extends State<CustomEditTextFiled> {
+
+  //TextEditingController controller = TextEditingController();
+  late TextEditingController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = TextEditingController();
+    controller.addListener(() {
+      print('value has changed, new value is ${controller.text}');
+    });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(covariant CustomEditTextFiled oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.request != widget.request) {
+      controller.text = widget.request;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: controller,
+      onChanged: (value) {
+        print(value);
+        // setState(() {
+        //   text = value;
+        // });
+      },
+      decoration: InputDecoration(
+          suffixIcon: IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: () {
+              controller.text = '';
+            },
+      ),
+      ),
+    );
+  }
+}
+
 class TextWidget extends StatelessWidget {
   final String content;
+
   const TextWidget(this.content, {super.key});
 
   @override
@@ -164,6 +295,7 @@ class TextWidget extends StatelessWidget {
 class Counter extends StatefulWidget {
   final String content;
   final int initialVal;
+
   const Counter(this.content, {super.key, required this.initialVal});
 
   @override
@@ -181,12 +313,12 @@ class _CounterState extends State<Counter> {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(onPressed: () {
-      setState(() {
-        _count++;
-      });
-    }, child: Text('${widget.content} $_count'));
+    return ElevatedButton(
+        onPressed: () {
+          setState(() {
+            _count++;
+          });
+        },
+        child: Text('${widget.content} $_count'));
   }
 }
-
-
