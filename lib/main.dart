@@ -52,6 +52,28 @@ class _MyHomePageState extends State<MyHomePage> {
               }
             },
           ),
+          ElevatedButton(
+              onPressed: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) {
+                  return Scaffold(
+                      appBar: AppBar(
+                        backgroundColor:
+                            Theme.of(context).colorScheme.inversePrimary,
+                        title: const Text('Flutter Demo'),
+                      ),
+                      body: Column(children: [
+                        const Text('sad'),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('go back'),
+                        ),
+                      ]));
+                }));
+              },
+              child: const Text('Go'))
         ],
       ),
       // body: const StackWidget(),
