@@ -1,7 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/widgets.dart';
 
 void main() {
   runApp(const MyApp());
@@ -41,33 +38,60 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text('Flutter Demo'),
-      ),
-      body: Stack(fit: StackFit.loose, children: [
-        Positioned(
-          bottom: 100,
-          left: 100,
-          child: Container(
-            color: Colors.red,
-            child: const Row(
+
+    //For adaptiveness
+    final mediaQuery = MediaQuery.of(context);
+    final screenSize = mediaQuery.size;
+    final desiredWith = 440.0;
+    final ratio = screenSize.width / desiredWith;
+
+    return FractionallySizedBox(
+      widthFactor: 1 / ratio,
+      heightFactor: 1 / ratio,
+      child: Transform.scale(
+        scale: ratio,
+        child: MediaQuery(
+          data: mediaQuery.copyWith(
+            viewInsets: mediaQuery.viewInsets.copyWith(
+              bottom: mediaQuery.viewInsets.bottom / ratio,
+            )
+          ),
+          child: Scaffold(
+            appBar: AppBar(
+              backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+              title: const Text('Flutter Demo'),
+
+            ),
+            body: const Column(
               mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Text('a'),
-                Text('a'),
-                Text('a'),
+                  Text('Hey'),
               ],
             ),
+            // body: const StackWidget(),
+            // body: const LayoutWidget(),
           ),
         ),
-        Container(
-          color: Colors.blue,
-          width: 150,
-          height: 650,
-          child: const Column(
+      ),
+    );
+  }
+}
+
+class StackWidget extends StatelessWidget {
+  const StackWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(fit: StackFit.loose, children: [
+      Positioned(
+        bottom: 100,
+        left: 100,
+        child: Container(
+          color: Colors.red,
+          child: const Row(
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text('a'),
@@ -76,8 +100,21 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           ),
         ),
-      ]),
-    );
+      ),
+      Container(
+        color: Colors.blue,
+        width: 150,
+        height: 650,
+        child: const Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text('a'),
+            Text('a'),
+            Text('a'),
+          ],
+        ),
+      ),
+    ]);
   }
 }
 
