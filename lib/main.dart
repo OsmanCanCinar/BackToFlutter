@@ -53,8 +53,8 @@ class _MyHomePageState extends State<MyHomePage> {
             },
           ),
           ElevatedButton(
-              onPressed: () {
-                Navigator.of(context)
+              onPressed: () async {
+                final result = await Navigator.of(context)
                     .push(MaterialPageRoute(builder: (context) {
                   return Scaffold(
                       appBar: AppBar(
@@ -63,15 +63,16 @@ class _MyHomePageState extends State<MyHomePage> {
                         title: const Text('Flutter Demo'),
                       ),
                       body: Column(children: [
-                        const Text('sad'),
+                        const Text('sass'),
                         ElevatedButton(
                           onPressed: () {
-                            Navigator.of(context).pop();
+                            Navigator.of(context).pop(true);
                           },
                           child: const Text('go back'),
                         ),
                       ]));
                 }));
+                print(result);
               },
               child: const Text('Go'))
         ],
