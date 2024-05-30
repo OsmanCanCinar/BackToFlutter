@@ -77,46 +77,10 @@ class _MyHomePageState extends State<MyHomePage> {
             },
           ),
           ElevatedButton(
-              // onPressed: ()  async {
-              onPressed: () {
-                // final result = await Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                final Future<bool?> result = Navigator.of(context)
-                    .push<bool>(MaterialPageRoute(builder: (context) {
-                  return WillPopScope(
-                    //Does not filter navigator.pop
-                    onWillPop: () async {
-                      print("will pop - true");
-                      return true;
-                      // return false;
-                    },
-                    child: const DefaultWidget(type: 0),
-                  );
-                }));
-                // print(result);
-                result
-                    .then((bool? value) => {
-                          if (value == true)
-                            {throw 'ERROR'}
-                          else
-                            {
-                              Navigator.of(context).push<bool>(
-                                  MaterialPageRoute(builder: (context) {
-                                return WillPopScope(
-                                  child: const DefaultWidget(type: 1),
-                                  //Does not filter navigator.pop
-                                  onWillPop: () async {
-                                    print("will pop - false");
-                                    return true;
-                                    // return false;
-                                  },
-                                );
-                              }))
-                            }
-                        })
-                    .onError((error, stackTrace) => {})
-                    .whenComplete(() => {})
-                    .then((value) => {});
-                print('while result is calculated..');
+              // onPressed: () async {
+                onPressed: () { // Since I don't return and use its value, I can use it like this.
+                //await navigate(context); // Since I don't return and use its value, I can use it like this.
+                navigate(context);
               },
               child: const Text('Go'))
         ],
@@ -124,6 +88,78 @@ class _MyHomePageState extends State<MyHomePage> {
       // body: const StackWidget(),
       // body: const LayoutWidget(),
     );
+  }
+
+  Future<void> navigate(BuildContext context) async {
+    try {
+      bool? result = await getAnswer(context);
+      print(result);
+      
+      if (result == true) {
+        throw 'ERROR';
+      } else {
+        result = await Navigator.of(context)
+            .push<bool>(MaterialPageRoute(builder: (context) {
+          return WillPopScope(
+            child: const DefaultWidget(type: 1),
+            //Does not filter navigator.pop
+            onWillPop: () async {
+              print("will pop - false");
+              return true;
+              // return false;
+            },
+          );
+        }));
+      }
+
+      if (result == true) {
+        print(result);
+      }
+    } catch (e) {
+
+    } finally {
+
+    }
+
+    // result.then((bool? value) => {
+    //           if (value == true)
+    //             {throw 'ERROR'}
+    //           else
+    //             {
+    //               Navigator.of(context).push<bool>(
+    //                   MaterialPageRoute(builder: (context) {
+    //                 return WillPopScope(
+    //                   child: const DefaultWidget(type: 1),
+    //                   //Does not filter navigator.pop
+    //                   onWillPop: () async {
+    //                     print("will pop - false");
+    //                     return true;
+    //                     // return false;
+    //                   },
+    //                 );
+    //               }))
+    //             }
+    //         })
+    //     .onError((error, stackTrace) => {})
+    //     .whenComplete(() => {})
+    //     .then((value) => {});
+    // print('while result is calculated..');
+  }
+
+  Future<bool?> getAnswer(BuildContext context) async {
+      bool? result = await Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      // final Future<bool?> result = Navigator.of(context).push<bool>(MaterialPageRoute(builder: (context) {
+      return WillPopScope(
+        //Does not filter navigator.pop
+        onWillPop: () async {
+          print("will pop - true");
+          return true;
+          // return false;
+        },
+        child: const DefaultWidget(type: 0),
+      );
+    }));
+    return result;
   }
 }
 
