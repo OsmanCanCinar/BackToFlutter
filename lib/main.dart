@@ -16,7 +16,24 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(),
+      // home: const MyHomePage(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const MyHomePage(),
+        '/settings': (context) => const SettingsPage(),
+      },
+    );
+  }
+}
+
+class SettingsPage extends StatelessWidget {
+  const SettingsPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: const Text('settings'),
     );
   }
 }
@@ -33,6 +50,11 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(onPressed: () {
+            Navigator.of(context).pushNamed('/settings');
+          }, icon: const Icon(Icons.settings))
+        ],
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text('Flutter Demo'),
       ),
@@ -56,21 +78,29 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () async {
                 final result = await Navigator.of(context)
                     .push(MaterialPageRoute(builder: (context) {
-                  return Scaffold(
-                      appBar: AppBar(
-                        backgroundColor:
-                            Theme.of(context).colorScheme.inversePrimary,
-                        title: const Text('Flutter Demo'),
-                      ),
-                      body: Column(children: [
-                        const Text('sass'),
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(context).pop(true);
-                          },
-                          child: const Text('go back'),
+                  return WillPopScope(
+                    //Does not filter navigator.pop
+                    onWillPop: () async {
+                      print("will pop - true");
+                      return false;
+                    },
+                    child: Scaffold(
+                        appBar: AppBar(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.inversePrimary,
+                          title: const Text('Flutter Demo'),
                         ),
-                      ]));
+                        body: Column(children: [
+                          const Text('sass'),
+                          ElevatedButton(
+                            onPressed: () {
+                              // Navigator.of(context).maybePop(true);
+                              Navigator.of(context).maybePop(true);
+                            },
+                            child: const Text('go back'),
+                          ),
+                        ])),
+                  );
                 }));
                 print(result);
               },
