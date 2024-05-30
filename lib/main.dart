@@ -1,195 +1,152 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-void main() {
-  runApp(const MyApp());
-}
+Future<Album> fetchAlbum() async {
+  await Future.delayed(const Duration(seconds: 2));
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final response = await http
+      .get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      // home: const MyHomePage(),
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const MyHomePage(),
-        '/settings': (context) => const SettingsPage(),
-      },
-    );
+  if (response.statusCode == 200) {
+    // If the server did return a 200 OK response,
+    // then parse the JSON.
+    return Album.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    throw Exception('Failed to load album');
   }
 }
 
-class SettingsPage extends StatelessWidget {
-  const SettingsPage({super.key});
+class Album {
+  final int userId;
+  final int id;
+  final String title;
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: const Text('settings'),
-    );
+  const Album({
+    required this.userId,
+    required this.id,
+    required this.title,
+  });
+
+  factory Album.fromJson(Map<String, dynamic> json) {
+    return switch (json) {
+      {
+        'userId': int userId,
+        'id': int id,
+        'title': String title,
+      } =>
+        Album(
+          userId: userId,
+          id: id,
+          title: title,
+        ),
+      _ => throw const FormatException('Failed to load album.'),
+    };
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+// void main() => runApp(const AlbumPage());
+
+class AlbumPage extends StatefulWidget {
+  const AlbumPage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<AlbumPage> createState() => _AlbumPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _AlbumPageState extends State<AlbumPage> {
+  // Future<Album>? futureAlbum;
+  Album? album;
+  bool isLoading = false;
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed('/settings');
-              },
-              icon: const Icon(Icons.settings))
-        ],
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text('Flutter Demo'),
-      ),
-      body: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          const Text('Hey'),
-          LayoutBuilder(
-            builder: (context, constraints) {
-              if (constraints.maxWidth < 450) {
-                return const Row(children: [Text('2')]);
-              } else {
-                return const Row(children: [
-                  Text('2'),
-                  Expanded(child: Text('2')),
-                ]);
-              }
-            },
-          ),
-          ElevatedButton(
-              // onPressed: () async {
-                onPressed: () { // Since I don't return and use its value, I can use it like this.
-                //await navigate(context); // Since I don't return and use its value, I can use it like this.
-                navigate(context);
-              },
-              child: const Text('Go'))
-        ],
-      ),
-      // body: const StackWidget(),
-      // body: const LayoutWidget(),
-    );
+  void initState() {
+    super.initState();
+    // futureAlbum = fetchAlbum();
   }
 
-  Future<void> navigate(BuildContext context) async {
+  Future<void> loadAlbum() async {
     try {
-      bool? result = await getAnswer(context);
-      print(result);
-      
-      if (result == true) {
-        throw 'ERROR';
-      } else {
-        result = await Navigator.of(context)
-            .push<bool>(MaterialPageRoute(builder: (context) {
-          return WillPopScope(
-            child: const DefaultWidget(type: 1),
-            //Does not filter navigator.pop
-            onWillPop: () async {
-              print("will pop - false");
-              return true;
-              // return false;
-            },
-          );
-        }));
-      }
-
-      if (result == true) {
-        print(result);
-      }
-    } catch (e) {
+      setState(() {
+        isLoading = true;
+      });
+      Album album = await fetchAlbum();
+      setState(() {
+        this.album = album;
+      });
+    } catch(e) {
 
     } finally {
-
+      setState(() {
+        isLoading = false;
+      });
     }
-
-    // result.then((bool? value) => {
-    //           if (value == true)
-    //             {throw 'ERROR'}
-    //           else
-    //             {
-    //               Navigator.of(context).push<bool>(
-    //                   MaterialPageRoute(builder: (context) {
-    //                 return WillPopScope(
-    //                   child: const DefaultWidget(type: 1),
-    //                   //Does not filter navigator.pop
-    //                   onWillPop: () async {
-    //                     print("will pop - false");
-    //                     return true;
-    //                     // return false;
-    //                   },
-    //                 );
-    //               }))
-    //             }
-    //         })
-    //     .onError((error, stackTrace) => {})
-    //     .whenComplete(() => {})
-    //     .then((value) => {});
-    // print('while result is calculated..');
   }
-
-  Future<bool?> getAnswer(BuildContext context) async {
-      bool? result = await Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-      // final Future<bool?> result = Navigator.of(context).push<bool>(MaterialPageRoute(builder: (context) {
-      return WillPopScope(
-        //Does not filter navigator.pop
-        onWillPop: () async {
-          print("will pop - true");
-          return true;
-          // return false;
-        },
-        child: const DefaultWidget(type: 0),
-      );
-    }));
-    return result;
-  }
-}
-
-class DefaultWidget extends StatelessWidget {
-  final int type;
-
-  const DefaultWidget({
-    super.key,
-    required this.type,
-  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: const Text('Flutter Demo'),
+          actions: [
+            IconButton(
+                onPressed: loadAlbum,
+                // onPressed: () {
+                // setState(() {
+                //   futureAlbum = fetchAlbum();
+                // });
+                // },
+                icon: const Icon(Icons.download)),
+          ],
+          title: const Text('Fetch Data Example'),
         ),
-        body: Column(children: [
-          const Text('sass'),
-          ElevatedButton(
-            onPressed: () {
-              if (type == 0) {
-                Navigator.of(context).maybePop(false);
-              } else if (type == 1) {
-                Navigator.of(context).maybePop(true);
-              }
-            },
-            child: const Text('go back'),
-          ),
-        ]));
+        body: Column(
+          children: [
+            Center(
+                child: isLoading
+                    ? const CircularProgressIndicator()
+                    : (album == null
+                        ? const Text('not started')
+                        : Text(album!.title))
+                // ), child: FutureBuilder<Album>(
+                //   future: futureAlbum,
+                //   builder: (context, snapshot) {
+                //     if (snapshot.connectionState == ConnectionState.none) {
+                //       return const Text('not started');
+                //     }
+                //     if (snapshot.hasData) {
+                //       return Text(snapshot.data!.title);
+                //     } else if (snapshot.hasError) {
+                //       return Text('${snapshot.error}');
+                //     }
+                //
+                //     // By default, show a loading spinner.
+                //     return const CircularProgressIndicator();
+                //   },
+                // ),
+                // ),
+                ),
+            ElevatedButton(onPressed: () async {
+              final numbers = [1,2,3,4,5];
+              await Future.forEach(numbers, (number) async {
+                print('pre $number');
+                await Future.delayed(const Duration(seconds: 1));
+                print('post $number');
+              });
+
+              // //for(int i = 0; i < numbers.length; i++) {
+              // for(final number in numbers) {
+              //   print('pre $number');
+              //   await Future.delayed(const Duration(seconds: 1));
+              //   print('post $number');
+              // }
+
+                print('list loaded');
+            }, child: const Text('Press!')),
+          ],
+        ));
   }
 }
