@@ -51,9 +51,11 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          IconButton(onPressed: () {
-            Navigator.of(context).pushNamed('/settings');
-          }, icon: const Icon(Icons.settings))
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed('/settings');
+              },
+              icon: const Icon(Icons.settings))
         ],
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text('Flutter Demo'),
@@ -75,14 +77,17 @@ class _MyHomePageState extends State<MyHomePage> {
             },
           ),
           ElevatedButton(
-              onPressed: () async {
-                final result = await Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) {
+              // onPressed: ()  async {
+              onPressed: () {
+                // final result = await Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                final Future<bool?> result = Navigator.of(context)
+                    .push<bool>(MaterialPageRoute(builder: (context) {
                   return WillPopScope(
                     //Does not filter navigator.pop
                     onWillPop: () async {
                       print("will pop - true");
-                      return false;
+                      return true;
+                      // return false;
                     },
                     child: Scaffold(
                         appBar: AppBar(
@@ -102,7 +107,11 @@ class _MyHomePageState extends State<MyHomePage> {
                         ])),
                   );
                 }));
-                print(result);
+                // print(result);
+                result.then((bool? value) => {
+                  print('result: $value')
+                });
+                print('while result is calculated..');
               },
               child: const Text('Go'))
         ],
