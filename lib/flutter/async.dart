@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:training_app_mac/main.dart';
+import 'package:training_app_mac/flutter/async_examples.dart';
 
 void main() {
   runApp(const MyApp());
