@@ -31,6 +31,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+   final list = [1,2,3,4,5];
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,6 +52,8 @@ class _HomePageState extends State<HomePage> {
               child: Text('Drawer Header'),
             ),
             ListTile(
+              leading: const Icon(Icons.add),
+              trailing: const Icon(Icons.minimize),
               title: const Text('Item 1'),
               onTap: () {
                 // Update the state of the app.
@@ -83,125 +88,41 @@ class _HomePageState extends State<HomePage> {
         ],
         title: const Text('yeah'),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              color: Colors.red,
-              margin: const EdgeInsets.all(10.2),
-              child: const SafeArea(
-                child: Text(
-                  'hey',
-                  textScaler: TextScaler.linear(3.0),
-                ),
-              ),
+      // body: const ExerciseWidget(),
+      body: Column(
+        children: [
+          SizedBox(
+            height: 300,
+            child: ListView.separated(
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    key: ValueKey(index),
+                    leading: const Icon(Icons.add),
+                    title: Text("Can $index"),
+                  );
+                },
+                separatorBuilder: (BuildContext context, int index) {
+                  return const Divider(color: Colors.black);
+                },
+                itemCount: list.length,
             ),
-            const SizedBox(height: 80),
-            Container(
-              color: Colors.blue,
-              child: const SafeArea(
-                child: Text(
-                  'heye',
-                  textScaler: TextScaler.linear(3.0),
-                ),
+          ),
+          Table(
+            children: const <TableRow>[
+              TableRow(
+                children: [
+                  Text('1'),
+                  Text('1'),
+                ]
+              ),  TableRow(
+                children: [
+                  Text('1'),
+                  Text('1'),
+                ]
               ),
-            ),
-            const SizedBox(height: 20),
-            Container(
-              width: 150,
-              height: 300,
-              color: Colors.green,
-              child: const SafeArea(
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: EdgeInsets.all(20.0),
-                    child: Text(
-                      'heya',
-                      textScaler: TextScaler.linear(3.0),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 80),
-            ClipRRect(
-              borderRadius: const BorderRadius.all(Radius.circular(50)),
-              child: Container(
-                color: Colors.yellow,
-                padding: const EdgeInsets.all(20.0),
-                child: const SafeArea(
-                  child: Text(
-                    'heyo',
-                    textScaler: TextScaler.linear(3.0),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 80),
-            AspectRatio(
-              aspectRatio: 4,
-              child: Container(
-                color: Colors.yellow,
-                padding: const EdgeInsets.all(20.0),
-                child: const SafeArea(
-                  child: Text(
-                    'heyo',
-                    textScaler: TextScaler.linear(3.0),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 80),
-            PhysicalModel(
-              color: Colors.green,
-              elevation: 20,
-              child: Container(
-                color: Colors.yellow,
-                padding: const EdgeInsets.all(20.0),
-                child: const SafeArea(
-                  child: Text(
-                    'heyo',
-                    textScaler: TextScaler.linear(3.0),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 80),
-            Container(
-              color: Colors.yellow,
-              padding: const EdgeInsets.all(20.0),
-              child: const SafeArea(
-                child: Text(
-                  'heyo',
-                  textScaler: TextScaler.linear(3.0),
-                ),
-              ),
-            ),
-            const SizedBox(height: 80),
-            Container(
-              color: Colors.yellow,
-              padding: const EdgeInsets.all(20.0),
-              child: const SafeArea(
-                child: Text(
-                  'heyo',
-                  textScaler: TextScaler.linear(3.0),
-                ),
-              ),
-            ),
-            const SizedBox(height: 80),
-            Container(
-              color: Colors.yellow,
-              padding: const EdgeInsets.all(20.0),
-              child: const SafeArea(
-                child: Text(
-                  'heyo',
-                  textScaler: TextScaler.linear(3.0),
-                ),
-              ),
-            ),
-          ],
-        ),
+            ],
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.shop_two),
@@ -209,6 +130,137 @@ class _HomePageState extends State<HomePage> {
           ScaffoldMessenger.of(context)
               .showSnackBar(const SnackBar(content: Text('Hey!')));
         },
+      ),
+    );
+  }
+}
+
+class ExerciseWidget extends StatelessWidget {
+  const ExerciseWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Container(
+            color: Colors.red,
+            margin: const EdgeInsets.all(10.2),
+            child: const SafeArea(
+              child: Text(
+                style: DefaultTextStyle(style: style, child: child)
+                'hey',
+                textScaler: TextScaler.linear(3.0),
+              ),
+            ),
+          ),
+          const SizedBox(height: 80),
+          Container(
+            color: Colors.blue,
+            child: const SafeArea(
+              child: Text(
+                'heye',
+                textScaler: TextScaler.linear(3.0),
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+          Container(
+            width: 150,
+            height: 300,
+            color: Colors.green,
+            child: const SafeArea(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: EdgeInsets.all(20.0),
+                  child: Text(
+                    'heya',
+                    textScaler: TextScaler.linear(3.0),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 80),
+          ClipRRect(
+            borderRadius: const BorderRadius.all(Radius.circular(50)),
+            child: Container(
+              color: Colors.yellow,
+              padding: const EdgeInsets.all(20.0),
+              child: const SafeArea(
+                child: Text(
+                  'heyo',
+                  textScaler: TextScaler.linear(3.0),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 80),
+          AspectRatio(
+            aspectRatio: 4,
+            child: Container(
+              color: Colors.yellow,
+              padding: const EdgeInsets.all(20.0),
+              child: const SafeArea(
+                child: Text(
+                  'heyo',
+                  textScaler: TextScaler.linear(3.0),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 80),
+          PhysicalModel(
+            color: Colors.green,
+            elevation: 20,
+            child: Container(
+              color: Colors.yellow,
+              padding: const EdgeInsets.all(20.0),
+              child: const SafeArea(
+                child: Text(
+                  'heyo',
+                  textScaler: TextScaler.linear(3.0),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 80),
+          Container(
+            color: Colors.yellow,
+            padding: const EdgeInsets.all(20.0),
+            child: const SafeArea(
+              child: Text(
+                'heyo',
+                textScaler: TextScaler.linear(3.0),
+              ),
+            ),
+          ),
+          const SizedBox(height: 80),
+          Container(
+            color: Colors.yellow,
+            padding: const EdgeInsets.all(20.0),
+            child: const SafeArea(
+              child: Text(
+                'heyo',
+                textScaler: TextScaler.linear(3.0),
+              ),
+            ),
+          ),
+          const SizedBox(height: 80),
+          Container(
+            color: Colors.yellow,
+            padding: const EdgeInsets.all(20.0),
+            child: const SafeArea(
+              child: Text(
+                'heyo',
+                textScaler: TextScaler.linear(3.0),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
