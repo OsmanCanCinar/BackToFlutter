@@ -1,4 +1,4 @@
-# training_app_mac
+# Back to Flutter
 
 A new Flutter project.
 
