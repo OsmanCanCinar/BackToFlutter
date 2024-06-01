@@ -1,7 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,8 +28,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-   final list = [1,2,3,4,5];
-
+  final list = [1, 2, 3, 4, 5];
 
   @override
   Widget build(BuildContext context) {
@@ -89,11 +85,17 @@ class _HomePageState extends State<HomePage> {
         title: const Text('yeah'),
       ),
       // body: const ExerciseWidget(),
-      body: Column(
-        children: [
-          SizedBox(
-            height: 300,
-            child: ListView.separated(
+      body: DefaultTextStyle(
+        style: const TextStyle(
+          color: Colors.green,
+          fontWeight: FontWeight.bold,
+          fontSize: 32,
+        ),
+        child: Column(
+          children: [
+            SizedBox(
+              height: 300,
+              child: ListView.separated(
                 itemBuilder: (context, index) {
                   return ListTile(
                     key: ValueKey(index),
@@ -105,24 +107,51 @@ class _HomePageState extends State<HomePage> {
                   return const Divider(color: Colors.black);
                 },
                 itemCount: list.length,
-            ),
-          ),
-          Table(
-            children: const <TableRow>[
-              TableRow(
-                children: [
-                  Text('1'),
-                  Text('1'),
-                ]
-              ),  TableRow(
-                children: [
-                  Text('1'),
-                  Text('1'),
-                ]
               ),
-            ],
-          ),
-        ],
+            ),
+            Table(
+              children: const <TableRow>[
+                TableRow(children: [
+                  Text(
+                    '1',
+                    style: TextStyle(
+                      color: Colors.blue,
+                    ),
+                  ),
+                  Text('1'),
+                ]),
+                TableRow(children: [
+                  Text('1'),
+                  Text('1'),
+                ]),
+              ],
+            ),
+            const SizedBox(height: 100),
+            ElevatedButton(
+              onPressed: () {},
+              child: RichText(
+                text: const TextSpan(
+                  style: TextStyle(color: Colors.cyan),
+                  text: "hello",
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: " ",
+                    ),
+                    TextSpan(
+                      text: "world",
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const AspectRatio(
+                aspectRatio: 2,
+                child: Image(
+              image: AssetImage('images/bard.jpg'),
+            )),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.shop_two),
@@ -150,7 +179,6 @@ class ExerciseWidget extends StatelessWidget {
             margin: const EdgeInsets.all(10.2),
             child: const SafeArea(
               child: Text(
-                style: DefaultTextStyle(style: style, child: child)
                 'hey',
                 textScaler: TextScaler.linear(3.0),
               ),
