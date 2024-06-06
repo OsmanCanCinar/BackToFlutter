@@ -101,6 +101,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> navigate(BuildContext context) async {
     try {
       bool? result = await getAnswer(context);
+
+
       print(result);
 
       if (result == true) {
